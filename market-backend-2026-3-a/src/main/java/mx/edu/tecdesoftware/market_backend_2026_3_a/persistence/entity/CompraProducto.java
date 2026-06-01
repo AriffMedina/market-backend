@@ -1,8 +1,6 @@
 package mx.edu.tecdesoftware.market_backend_2026_3_a.persistence.entity;
 
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "compras_productos")
@@ -16,6 +14,15 @@ public class CompraProducto {
     private Integer cantidad;
     private Double total;
     private Boolean estado;
+
+    //Saber todos los productos que hay en una compra
+    @ManyToOne
+    @JoinColumn(name = "id_compra", insertable = false, updatable = false)
+    private Compra compra;
+
+    @ManyToOne
+    @JoinColumn(name = "id_producto", insertable = false, updatable = false)
+    private Producto producto;
 
     public CompraProductoPK getId() {
         return id;
