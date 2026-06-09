@@ -5,6 +5,7 @@ import mx.edu.tecdesoftware.market_backend_2026_3_a.domain.repository.ProductRep
 import mx.edu.tecdesoftware.market_backend_2026_3_a.persistence.crud.ProductoCrudRepository;
 import mx.edu.tecdesoftware.market_backend_2026_3_a.persistence.entity.Producto;
 import mx.edu.tecdesoftware.market_backend_2026_3_a.persistence.mapper.ProductMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -13,7 +14,10 @@ import java.util.Optional;
 
 @Repository // le dices a spring que esta clase se comunicará con la db
 public class ProductoRepository implements ProductRepository {
+
+    @Autowired
     private ProductoCrudRepository productoCrudRepository;
+    @Autowired
     private ProductMapper productMapper;
 
     //SELECT * FROM productos
@@ -59,7 +63,7 @@ public class ProductoRepository implements ProductRepository {
      */
 
     //Eliminar por id
-    public void delete(int idProducto){
-        productoCrudRepository.deleteById(idProducto);
+    public void delete(int productId){
+        productoCrudRepository.deleteById(productId);
     }
 }
