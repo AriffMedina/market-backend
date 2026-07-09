@@ -1,6 +1,8 @@
 package mx.edu.tecdesoftware.market_backend_2026_3_a.persistence.entity;
 
 import jakarta.persistence.*;
+import org.hibernate.engine.internal.Cascade;
+
 import java.util.List;
 
 import java.time.LocalDateTime;
@@ -32,7 +34,7 @@ public class Compra {
     private Cliente cliente;
 
     //Una compra tiene muchos productos
-    @OneToMany(mappedBy = "compra")
+    @OneToMany(mappedBy = "compra", cascade = CascadeType.ALL)
     private List<CompraProducto> compraProductos;
 
     public Integer getIdCompra() {
