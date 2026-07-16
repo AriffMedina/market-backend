@@ -3,6 +3,7 @@ package mx.edu.tecdesoftware.market_backend_2026_3_a.persistence;
 import mx.edu.tecdesoftware.market_backend_2026_3_a.domain.Purchase;
 import mx.edu.tecdesoftware.market_backend_2026_3_a.domain.repository.PurchaseRepository;
 import mx.edu.tecdesoftware.market_backend_2026_3_a.persistence.crud.CompraCrudRepository;
+import mx.edu.tecdesoftware.market_backend_2026_3_a.persistence.crud.ProductoCrudRepository;
 import mx.edu.tecdesoftware.market_backend_2026_3_a.persistence.entity.Compra;
 import mx.edu.tecdesoftware.market_backend_2026_3_a.persistence.entity.CompraProducto;
 import mx.edu.tecdesoftware.market_backend_2026_3_a.persistence.mapper.PurchaseItemMapper;
@@ -18,6 +19,8 @@ public class CompraRepository implements PurchaseRepository {
 
     @Autowired
     private CompraCrudRepository compraCrudRepository;
+    @Autowired
+    private ProductoCrudRepository productoCrudRepository;
     @Autowired
     private PurchaseMapper purchaseMapper;
     @Autowired
@@ -49,7 +52,14 @@ public class CompraRepository implements PurchaseRepository {
         // ya que id_compra se resuelve mediante @MapsId a partir de esta relación.
         if (purchase.getItems() != null){
             List<CompraProducto> compraProductos = purchaseItemMapper.toCompraProductos(purchase.getItems());
-            compraProductos.forEach(compraProducto -> compraProducto.setCompra(compra));
+            for (int i = 0; i < compraProductos.size(); i++) {
+                CompraProducto compraProducto = compraProductos.get(i);
+                compraProducto.setCompra(compra);
+                // getReferenceById NO hace fetch a la BD, solo crea un proxy
+                // con el id, suficiente para que @MapsId("idProducto") resuelva la PK
+                Integer productoId = purchase.getItems().get(i).getProductId();
+                compraProducto.setProducto(productoCrudRepository.getReferenceById(productoId));
+            }
             compra.setCompraProductos(compraProductos);
         }
 
